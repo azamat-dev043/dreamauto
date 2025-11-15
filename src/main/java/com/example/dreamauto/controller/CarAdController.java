@@ -47,6 +47,13 @@ public class CarAdController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/my")
+    public ResponseEntity<PageResponse<CarAdResponseDto>> getMyAds(@RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "20") int size,
+                                                                   @RequestParam(defaultValue = "false") boolean includeInactive) {
+        return ResponseEntity.ok(carAdService.getMyAds(page, size, includeInactive));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<CarAdResponseDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(carAdService.getById(id));

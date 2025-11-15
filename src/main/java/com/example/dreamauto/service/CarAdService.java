@@ -18,6 +18,8 @@ public interface CarAdService {
 
     PageResponse<CarAdResponseDto> search(CarAdFilter filter, int page, int size, boolean includeInactive);
 
+    PageResponse<CarAdResponseDto> getMyAds(int page, int size, boolean includeInactive);
+
     CarAdResponseDto updatePhotos(Long adId, List<String> photoUrls);
 
     void setActive(Long adId, boolean active);

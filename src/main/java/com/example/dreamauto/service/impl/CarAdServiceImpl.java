@@ -101,6 +101,17 @@ public class CarAdServiceImpl implements CarAdService {
     }
 
     @Override
+    public PageResponse<CarAdResponseDto> getMyAds(int page, int size, boolean includeInactive) {
+        User currentUser = userService.getCurrentUser();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, DEFAULT_SORT));
+        Page<CarAd> ads = includeInactive
+                ? carAdRepository.findBySellerId(currentUser.getId(), pageable)
+                : carAdRepository.findBySellerIdAndIsActiveTrue(currentUser.getId(), pageable);
+        List<CarAdResponseDto> content = ads.stream().map(this::mapToDto).toList();
+        return new PageResponse<>(content, ads.getNumber(), ads.getSize(), ads.getTotalElements(), ads.getTotalPages());
+    }
+
+    @Override
     @Transactional
     public CarAdResponseDto updatePhotos(Long adId, List<String> photoUrls) {
         CarAd carAd = getOwnedOrAdminAd(adId);
